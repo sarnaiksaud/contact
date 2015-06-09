@@ -5,7 +5,6 @@
 		$batch_no = $_REQUEST['batch_no'];
 	else
 		die("No batch_no specified");
-	
 		
 	require_once('vCard_2.php');
 	require_once('to_database.php');
