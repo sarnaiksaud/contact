@@ -168,5 +168,15 @@ function storeData($conn,$dir,$filename)
 			
 	}
 	?>
+<?php
+	function set_execution_time()
+	{
+		ini_set('max_execution_time', 30000); 
+	}
+	function reset_execution_time()
+	{
+		ini_set('max_execution_time', 300); 
+	}
+?>
 
 

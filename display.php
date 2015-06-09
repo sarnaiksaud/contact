@@ -8,10 +8,13 @@
 	else
 		die("no batch_id recieved");
 	
-	ini_set('max_execution_time', 30000); 
+	
 	require_once('vCard_2.php');
 	require_once('to_database.php');
 	require_once('functions.php');
+	/* <Start Mod date="09-June-2015" >*/
+	set_execution_time();
+	/* <End Mod date="09-June-2015" >*/
 	
 	$conn = open_connection();
 	
@@ -88,7 +91,9 @@
 		}
 	}
 	close_connection($conn);
-	ini_set('max_execution_time', 300); 
+	/* <Start Mod date="09-June-2015" >*/
+	reset_execution_time();
+	/* <End Mod date="09-June-2015" >*/
 ?>
 </body>
 </html>
