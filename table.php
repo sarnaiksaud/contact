@@ -77,9 +77,77 @@
 	</table>
 <?php
 	}
-	else
+	//else
 	{
-		echo "No VCF file found at location [<b>". $dir . "<b>]";
+		//TODO display added batch under this
+	?>
+	<hr>
+	ALL READY LOADED FILES
+	<hr>
+	<table border=1>
+	<tr>
+		<th>Batch Number</th>
+		<th>File Name</th>
+		<th>File MD5</th>
+		<th>Loaded ? </th>
+		<th>Process</th>
+	</tr>
+	<?php
+		
+		$name = oci_parse($conn, "SELECT batch_no,file_name,md5 FROM batch_header order by 1");
+
+		if(oci_execute($name))
+		{
+			while($name_row=oci_fetch_array($name))
+			{
+				$filename = $name_row[1];
+				$file_md5 = $name_row[2];
+				$ret = isLoaded($conn,$filename,$file_md5);
+				echo "<tr>";
+					IF($ret == -1)
+					{					
+						echo "<td><br></td>";
+						echo "<td>$filename</td>";
+						echo "<td>$file_md5</td>";
+						echo "<td><a href='load.php?dir=$dir&filename=$filename'>Load this file</a></td>";
+						echo "<td><br></td>";
+					}
+					ELSE
+					{
+						$status = getStatus($conn,$ret,$file_md5);
+						
+						echo "<td>$ret</td>";
+						echo "<td><a href='stats.php?batch_no=$ret'>$filename</a></td>";
+						echo "<td>$file_md5</td>";
+						echo "<td><br></td>";
+						IF ($status == 'T')
+						{
+							echo "<td>";
+							echo "<a href='accept.php?batch_no=$ret'>Process</a>";
+							echo "<br>";
+							echo "<a href='reject.php?batch_no=$ret'>Reject</a>";
+							echo "</td>";							
+						}
+						ELSE IF ($status == 'P')
+						{
+							echo "<td>";
+							echo "Processed";
+							echo "</td>";							
+						}
+						ELSE IF ($status == 'R')
+						{
+							echo "<td>";
+							echo "Rejected";
+							echo "</td>";							
+						}
+					}
+				echo "</tr>";
+			}
+		}
+	?>
+	</table>
+<?php	
+		//echo "No VCF file found at location [<b>". $dir . "<b>]";
 	}
 	//echo storeData() . " ";
 	
